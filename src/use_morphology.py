@@ -15,21 +15,25 @@ kernel[2, :] = 1
 eroded = cv2.morphologyEx(edges, cv2.MORPH_ERODE, kernel)  # erode image to remove unwanted lines
 
 indices = np.nonzero(eroded) 					# find (x,y) position of the horizontal lines
-
+#print(indices)
 rows = np.unique(indices[0])   					# As indices contain all the points along horizontal line, so get unique rows only (indices[0] contains rows or y coordinate)
+#print(rows)
 
 
-# now you have unique rows but edges are more than 1 pixel thick
-# so remove lines which are near to each other using a certain threshold
+# because one line have more than one pixel,
+# so remove lines which are near to each other using a certain threshold ( threshold = 10)
 filtered_rows = []
 for idx in range(len(rows)):
     if idx == 0:
         filtered_rows.append(rows[idx])
     else:
-        if np.abs(rows[idx] - rows[idx - 1]) >= 10:
+        if np.abs(rows[idx] - rows[idx - 1]) >= 10: 
             filtered_rows.append(rows[idx])
 
-# Crop Line Of Table
+#filtered_rowss.append(rows[i] for i in range(len(rows)) if i == 0 or np.abs(rows[i] - rows[i- 1]) >= 10 )
+
+#print(filtered_rows)
+Crop Line Of Table
 for i in range(len(filtered_rows)):
     if i < len(filtered_rows)-1:
         cv2.imwrite('../output/line_{}.jpg'.format(i), img[filtered_rows[i]:filtered_rows[i+1], :, :])
